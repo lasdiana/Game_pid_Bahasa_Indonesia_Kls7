@@ -1,0 +1,210 @@
+<!DOCTYPE html><html lang="id"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GAME PAPAN DIGITAL - Bahasa Indonesia VII - 1 Layar Penuh</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;height:100%;overflow:hidden;font-family:Arial,sans-serif;background:#0d47a1;color:#fff}
+.top{background:#ff9800;padding:5px 10px;font-size:15px;font-weight:bold;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.top small{font-size:10px;font-weight:normal;display:block}
+.top button{padding:5px 9px;border:0;border-radius:8px;font-weight:bold;cursor:pointer;background:#fff;color:#1565c0;font-size:11px}
+.wrap{max-width:1280px;margin:0 auto;padding:5px;height:calc(100vh - 38px);display:flex;flex-direction:column;gap:5px}
+.row{display:flex;gap:5px;align-items:flex-start}
+.card{background:#fff;color:#222;border-radius:10px;padding:6px 8px;flex:1;min-width:0}
+.card b{font-size:11px}
+.papan{flex:1;display:grid;grid-template-columns:repeat(7,1fr);grid-template-rows:repeat(3,1fr);gap:5px;min-height:0}
+.kotak{background:#fff;color:#222;border-radius:10px;padding:4px 3px;font-weight:bold;font-size:11px;border:2px solid transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.15;min-height:0;overflow:hidden}
+.kotak small{font-weight:normal;font-size:9px;line-height:1.1}
+.kotak.start{background:#2e7d32;color:#fff}.kotak.finish{background:#ffd600;color:#222}.kotak.bonus{background:#e1f5fe;border-color:#0288d1}.kotak.zonk{background:#ffebee;border-color:#e53935}
+.pion{font-size:12px;line-height:1}
+.skor{display:flex;gap:5px;flex-wrap:wrap}
+.team{background:#fff;color:#222;border-radius:9px;padding:5px;flex:1;border:3px solid transparent;min-width:110px}
+.team.on{border-color:#ff9800}.team b{font-size:11px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.team .poin{font-size:18px;font-weight:bold;color:#1565c0;line-height:1}
+.team input{width:100%;padding:3px;border:1px solid #ddd;border-radius:6px;text-align:center;font-weight:bold;font-size:11px;margin-top:2px}
+.team .kecil{font-size:10px;color:#555}
+.btn{padding:5px 8px;border:0;border-radius:8px;font-weight:bold;font-size:12px;cursor:pointer;margin:1px;color:#fff}.b1{background:#1565c0}.b2{background:#2e7d32}.b3{background:#ef6c00}.b4{background:#e53935}.b5{background:#fff;color:#1565c0}.bMusik{background:#7b1fa2}.bDana{background:#00aed6}
+.dadu{font-size:26px;line-height:1}
+.soalBox{background:#fff;color:#222;border-radius:12px;padding:10px;text-align:left;display:none;max-height:38vh;overflow:auto}
+.soalBox h2{margin:0 0 4px;color:#1565c0;font-size:16px}.soalBox p{font-size:15px;line-height:1.35;margin:4px 0}
+.jawaban{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px}
+.jawaban button{padding:8px;font-size:13px;font-weight:bold;border:2px solid #1565c0;background:#e3f2fd;border-radius:10px;cursor:pointer}
+.timer{font-size:20px;font-weight:bold;color:#ff9800;line-height:1}
+.semBox{display:flex;gap:5px;justify-content:center;margin:3px 0}
+.semBox button{padding:5px 8px;border:0;border-radius:8px;font-weight:bold;font-size:11px;cursor:pointer;background:#eee;color:#1565c0;flex:1}.semBox button.on{background:#ff9800;color:#fff}
+.pilihBab{display:flex;gap:4px;justify-content:center;flex-wrap:wrap;margin:3px 0}
+.pilihBab button{padding:4px 8px;border-radius:12px;border:0;font-weight:bold;cursor:pointer;background:#eee;color:#1565c0;font-size:11px}.pilihBab button.on{background:#ff9800;color:#fff}
+.pilihBab button.locked{background:#ddd;color:#999;cursor:not-allowed;text-decoration:line-through}
+.modeBox{display:flex;gap:5px;margin:3px 0}
+.modeBox button{padding:5px 8px;border:0;border-radius:8px;font-weight:bold;font-size:11px;cursor:pointer;background:#eee;color:#1565c0;flex:1}.modeBox button.on{background:#1565c0;color:#fff}
+.juara{background:#ffd600;color:#222;border-radius:10px;padding:5px;font-size:12px;font-weight:bold;display:none}
+#splash{position:fixed;inset:0;z-index:9999;background:linear-gradient(135deg,#0d47a1,#1565c0,#42a5f5);display:flex;align-items:center;justify-content:center;padding:16px}
+.splash-card{background:#fff;color:#222;width:100%;max-width:520px;border-radius:18px;padding:22px;max-height:92vh;overflow:auto;text-align:left}
+.splash-card label{display:block;font-weight:bold;margin:12px 0 4px;font-size:14px}.splash-card input{width:100%;padding:12px;border:2px solid #ddd;border-radius:10px;box-sizing:border-box;font-size:16px}
+.btn-masuk{width:100%;padding:14px;border:0;border-radius:12px;background:#ff9800;color:#fff;font-weight:bold;font-size:17px;cursor:pointer;margin-top:16px}
+.danaBox{background:#e0f7fa;border:2px dashed #00aed6;border-radius:14px;padding:12px;margin-top:12px;text-align:center}
+.peroranganBox{background:#fff3e0;border-radius:8px;padding:6px;margin-top:5px;display:none}
+.peroranganBox input{padding:6px;border:2px solid #ddd;border-radius:7px;width:150px;font-size:12px}
+.daftarSiswa{max-height:48px;overflow:auto;font-size:11px;text-align:left;margin-top:4px}
+@media(max-width:800px){html,body{overflow:auto}.wrap{height:auto}.papan{grid-template-columns:repeat(3,1fr);grid-template-rows:auto}.kotak{min-height:78px}}
+</style></head>
+<body>
+<div id="splash"><div class="splash-card">
+<h1 style="text-align:center;color:#1565c0;margin:0">🎲 GAME PAPAN DIGITAL</h1>
+<h2 style="text-align:center;margin:4px 0">BAHASA INDONESIA KELAS VII</h2>
+<p style="text-align:center;font-size:14px">Dibuat oleh Hari Lasdiana, S.Pd.<br>1 Layar Penuh - Tanpa Scroll<br>21 Kotak • 50+ Soal Acak • Kelompok / Perorangan (Maks 50 Siswa)</p>
+<label>👩‍🏫 Nama Guru / Pengguna:</label>
+<input id="inNamaPengguna" placeholder=>
+<label>🏫 Instansi / Nama Sekolah:</label>
+<input id="inSekolahPengguna" placeholder=>
+<button class="btn-masuk" onclick="masukGame()">✅ MASUK KE PERMAINAN →</button>
+<div class="danaBox"><b>💙 Dukung Pengembangan Aplikasi Ini</b><br><span style="font-size:13px">Jika game ini bermanfaat, berkenan memberi sumbangan seikhlasnya untuk pembuat aplikasi.</span><br><br><b>DANA: 083822993789</b><br><span style="font-size:13px">a.n. Hari Lasdiana, S.Pd.</span><br><button class="btn bDana" onclick="salinDana()" style="padding:10px 16px;font-size:15px;margin-top:8px">📋 SALIN NOMOR DANA</button><p id="ketSalin" style="font-size:12px;color:#2e7d32"></p></div>
+<p style="text-align:center;font-size:11px;color:#999;margin-top:10px">Sumbangan bersifat sukarela, tidak wajib. Terima kasih.</p>
+</div></div>
+
+<div class="top"><div>🎲 GAME PAPAN DIGITAL - BAHASA INDONESIA KELAS VII <small>Dibuat oleh Hari Lasdiana, S.Pd. • Selamat datang, <span id="txtPengguna">-</span> dari <span id="txtSekolahPengguna">-</span></small></div><div><button onclick="toggleFullscreen()">⛶ FULLSCREEN</button> <button onclick="document.getElementById('splash').style.display='flex'">👤 GANTI NAMA</button></div></div>
+<div class="wrap">
+
+<div class="row">
+<div class="card" style="flex:1"><b>🎵 MUSIK:</b> <button class="btn bMusik" id="btnMusik" onclick="toggleMusik()">🎵 OFF</button> <button class="btn b1" onclick="bunyiBenar()">🔊 BENAR</button> <button class="btn b4" onclick="bunyiSalah()">🔊 SALAH</button><br><b>MODE:</b><div class="modeBox"><button id="btnModeKelompok" class="on" onclick="pilihMode('kelompok')">👥 KELOMPOK</button><button id="btnModePerorangan" onclick="pilihMode('perorangan')">🧍 PERORANGAN</button></div>
+<div class="peroranganBox" id="peroranganBox">
+<input id="inNamaSiswa" placeholder="Nama siswa"> <button class="btn b2" onclick="tambahSiswa()">➕ TAMBAH</button> <button class="btn b1" onclick="tambahContohSiswa()">⚡ CONTOH 10</button> <button class="btn b4" onclick="hapusSemuaSiswa()">🗑 HAPUS</button>
+<div class="daftarSiswa" id="daftarSiswa"></div>
+</div>
+</div>
+<div class="card" style="flex:1.6"><b>1) SEMESTER:</b><div class="semBox"><button id="btnSem1" class="on" onclick="pilihSemester(1)">📗 SEMESTER 1 - Bab 1-3</button><button id="btnSem2" onclick="pilihSemester(2)">📘 SEMESTER 2 - Bab 4-6</button></div><b>2) BAB:</b><div class="pilihBab" id="pilihBab"></div><div id="infoBab" style="font-size:11px"></div><div id="infoSudahJawab" style="font-size:11px;color:#1565c0;font-weight:bold"></div></div>
+<div class="card" style="flex:0.8"><b>GILIRAN:</b> <span id="giliran" style="font-size:14px;font-weight:bold;color:#1565c0">Kelompok A</span> • <span id="posisiTxt" style="font-size:11px">START</span><br><span class="dadu" id="dadu">🎲</span> <button class="btn b3" onclick="lemparDadu()">🎲 LEMPAR DADU</button><br>⏰ <span class="timer" id="timer">30</span> <button class="btn b1" onclick="mulaiTimer()">▶ TIMER</button> <button class="btn b1" onclick="acakKelompok()">🔀 ACAK</button></div>
+</div>
+
+<div class="juara" id="juaraBox"></div>
+<div class="skor" id="skorBox"></div>
+<div class="papan" id="papan"></div>
+
+<div class="soalBox" id="soalBox">
+<h2 id="soalJudul">SOAL MUNCUL!</h2>
+<p id="soalTeks"></p>
+<p style="font-size:12px;color:#c62828;font-weight:bold">⚠ Kalau salah, pion balik ke START!</p>
+<div class="jawaban" id="jawabanBox"></div>
+</div>
+
+<div style="display:flex;gap:6px;justify-content:center;align-items:center;flex-wrap:wrap">
+<button class="btn b2" onclick="tampilJuara()">🏆 LIHAT JUARA</button>
+<button class="btn b5" onclick="resetGame()">🔄 ULANG DARI AWAL</button>
+<span style="font-size:11px;color:#fff">Kelompok: 4 kelompok. Perorangan: maks 50 siswa. Benar +100, salah = START + Bab terkunci, BONUS +100 langsung pindah, ZONK -50 langsung pindah, FINISH 20 + poin terbanyak = Juara.</span>
+</div>
+
+</div>
+<script>
+function toggleFullscreen(){if(!document.fullscreenElement){document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen();}else{document.exitFullscreen&&document.exitFullscreen();}}
+function salinDana(){var txt='083822993789';if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(function(){document.getElementById('ketSalin').textContent='✅ Nomor DANA tersalin: '+txt;}).catch(function(){alert('Nomor DANA: '+txt);});}else{alert('Nomor DANA: '+txt);}}
+function masukGame(){var n=document.getElementById('inNamaPengguna').value.trim();var s=document.getElementById('inSekolahPengguna').value.trim();if(!n){alert('Isi dulu ya, Nama Guru / Pengguna-nya.');return;}if(!s){alert('Isi dulu ya, Instansi / Nama Sekolah-nya.');return;}document.getElementById('txtPengguna').textContent=n;document.getElementById('txtSekolahPengguna').textContent=s;document.getElementById('splash').style.display='none';}
+var audioCtx=null;var musikOn=false;var musikInterval=null;var nadaIdx=0;
+function getAudio(){if(!audioCtx){audioCtx=new (window.AudioContext||window.webkitAudioContext)();}if(audioCtx.state=='suspended'){audioCtx.resume();}return audioCtx;}
+function mainNada(freq,dur,tipe,vol){try{var ctx=getAudio();var o=ctx.createOscillator();var g=ctx.createGain();o.type=tipe||'sine';o.frequency.value=freq;g.gain.value=vol||0.15;g.gain.exponentialRampToValueAtTime(0.01,ctx.currentTime+dur);o.connect(g);g.connect(ctx.destination);o.start();o.stop(ctx.currentTime+dur);}catch(e){}}
+function bunyiBenar(){mainNada(523,0.15,'sine',0.2);setTimeout(function(){mainNada(659,0.15,'sine',0.2);},150);setTimeout(function(){mainNada(784,0.3,'sine',0.25);},300);}
+function bunyiSalah(){mainNada(200,0.4,'sawtooth',0.15);}
+function bunyiDadu(){mainNada(300,0.1,'square',0.1);setTimeout(function(){mainNada(500,0.15,'square',0.12);},200);}
+function bunyiBonus(){mainNada(784,0.15,'sine',0.2);setTimeout(function(){mainNada(1046,0.3,'sine',0.25);},150);}
+function bunyiZonk(){mainNada(300,0.3,'sawtooth',0.12);}
+function bunyiFinish(){var arr=[523,659,784,1046];for(var i=0;i<arr.length;i++){(function(f,idx){setTimeout(function(){mainNada(f,0.3,'sine',0.22);},idx*180);})(arr[i],i);}}
+function bunyiKunci(){mainNada(300,0.2,'square',0.12);}
+function toggleMusik(){musikOn=!musikOn;document.getElementById('btnMusik').textContent=musikOn?'🎵 ON':'🎵 OFF';if(musikOn){var lagu=[523,659,784,659,880,784,659,523];nadaIdx=0;musikInterval=setInterval(function(){if(!musikOn){return;}mainNada(lagu[nadaIdx%lagu.length],0.25,'triangle',0.08);nadaIdx++;},400);}else{clearInterval(musikInterval);}}
+function acakArray(arr){var a=arr.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var tmp=a[i];a[i]=a[j];a[j]=tmp;}return a;}
+var BAB=[
+{n:'Bab 1 - Jelajah Nusantara',m:'Teks Deskripsi',sem:1,soal:[
+{q:'Manakah yang termasuk ciri teks deskripsi?',a:['Menggambarkan sesuatu dengan kata konkret dan perincian','Menyuruh orang melakukan sesuatu','Menceritakan khayalan','Memberitakan kejadian'],k:0},
+{q:'"Pantai Pangandaran sangat indah, pasirnya putih dan airnya jernih." Kalimat ini termasuk?',a:['Deskripsi','Prosedur','Berita','Surat'],k:0},
+{q:'Kata konkret untuk mendeskripsikan durian adalah?',a:['Berduri, kuning, harum menyengat','Bagus, indah, baik','Sangat, amat, sekali','Cepat, lambat, tinggi'],k:0},
+{q:'Struktur teks deskripsi yang benar adalah?',a:['Identifikasi - Deskripsi bagian - Penutup','Tujuan - Langkah - Penutup','Orientasi - Komplikasi - Resolusi','Pembuka - Isi - Penutup surat'],k:0},
+{q:'Tujuan teks deskripsi adalah?',a:['Menggambarkan objek agar pembaca seolah melihat / merasakan','Menyuruh pembaca membuat sesuatu','Memberi kabar terbaru','Mengajak berdebat'],k:0},
+{q:'Bacalah: "Kue ini manis, lembut, dan harum pandan." Kalimat ini bagus karena?',a:['Ada kata konkret: manis, lembut, harum pandan','Ada kata sangat','Ada angka','Ada nama orang'],k:0},
+{q:'Mana kalimat deskripsi yang paling hidup?',a:['Sekolahku bersih, halamannya luas, ada pohon rindang, dan anak-anaknya ramah.','Sekolahku bagus sekali.','Sekolahku ada.','Sekolahku sangat sangat bagus.'],k:0},
+{q:'Kata "harum, lembut, kuning" dalam deskripsi disebut?',a:['Kata konkret / perincian','Kata ganti','Kata kerja','Kata sambung'],k:0},
+{q:'Objek yang bisa dideskripsikan adalah?',a:['Orang, tempat, benda, suasana','Hanya orang','Hanya tempat','Hanya benda'],k:0},
+{q:'Langkah pertama menulis teks deskripsi adalah?',a:['Menentukan objek yang akan dideskripsikan','Langsung menulis penutup','Membuat judul saja','Menyalin punya teman'],k:0}
+]},
+{n:'Bab 2 - Berkelana di Dunia Imajinasi',m:'Puisi & Fantasi',sem:1,soal:[
+{q:'Unsur puisi yang berhubungan dengan pilihan kata disebut?',a:['Diksi','Rima','Bait','Tema'],k:0},
+{q:'Ciri cerita fantasi adalah?',a:['Ada unsur khayalan / keajaiban','Semua kejadian nyata','Berisi langkah-langkah','Berisi berita'],k:0},
+{q:'"Bulan tersenyum di langit malam" termasuk majas?',a:['Personifikasi','Hiperbola','Metafora','Ironi'],k:0},
+{q:'Rima adalah?',a:['Pengulangan bunyi di akhir baris puisi','Jumlah baris puisi','Tema puisi','Judul puisi'],k:0},
+{q:'Mana puisi yang paling imajinatif?',a:['Aku terbang bersama awan, menyapa bintang yang tertawa.','Aku pergi ke sekolah.','Aku makan nasi.','Aku tidur jam 9.'],k:0},
+{q:'Tema puisi adalah?',a:['Gagasan utama / pokok pikiran puisi','Judul puisi','Nama penulis','Jumlah bait'],k:0},
+{q:'Tokoh dalam cerita fantasi bisa berupa?',a:['Manusia, hewan yang bisa bicara, makhluk khayalan','Hanya manusia','Hanya hewan','Hanya benda mati'],k:0},
+{q:'Latar dalam cerita fantasi biasanya?',a:['Tempat khayalan / ajaib / tidak nyata','Hanya di sekolah','Hanya di rumah','Hanya di pasar'],k:0}
+]},
+{n:'Bab 3 - Hal yang Baik bagi Tubuh',m:'Teks Prosedur',sem:1,soal:[
+{q:'Ciri teks prosedur adalah?',a:['Ada tujuan dan langkah-langkah berurutan','Ada rima dan bait','Ada 5W+1H','Ada tokoh khayalan'],k:0},
+{q:'Kata yang biasa dipakai di teks prosedur?',a:['Pertama, kedua, kemudian, lalu','Indah, cantik, harum','Kemarin, tadi malam','Katanya, menurutnya'],k:0},
+{q:'Struktur teks prosedur?',a:['Tujuan - Bahan / Alat - Langkah-langkah','Identifikasi - Deskripsi','Orientasi - Komplikasi','Pembuka - Isi - Penutup'],k:0},
+{q:'Urutan yang benar untuk mencuci tangan adalah?',a:['Basahi - Sabuni - Gosok - Bilas - Keringkan','Bilas - Sabuni - Basahi','Keringkan - Basahi - Sabuni','Sabuni - Keringkan - Basahi'],k:0},
+{q:'Tulis langkah membuat jamu yang benar. Mana yang paling lengkap?',a:['Siapkan jahe, cuci, geprek, rebus 10 menit, saring, minum hangat.','Rebus saja.','Minum saja.','Beli di warung.'],k:0},
+{q:'Kalimat perintah dalam teks prosedur contohnya?',a:['Cuci tanganmu dengan sabun!','Tanganmu kotor ya?','Apakah tanganmu kotor?','Tangan itu untuk menulis.'],k:0},
+{q:'Agar teks prosedur mudah diikuti, langkahnya harus?',a:['Berurutan dan jelas','Acak-acakan','Disembunyikan','Tidak ada langkah'],k:0},
+{q:'Makanan yang baik bagi tubuh adalah?',a:['Sayur, buah, air putih, makanan bergizi','Hanya mie instan','Hanya minuman manis','Hanya gorengan'],k:0}
+]},
+{n:'Bab 4 - Aksi Nyata Para Pelindung Bumi',m:'Teks Berita + Hoaks',sem:2,soal:[
+{q:'Unsur berita 5W+1H, W yang pertama artinya?',a:['What - Apa yang terjadi','Where - Di mana','When - Kapan','Who - Siapa'],k:0},
+{q:'Ciri berita palsu / hoaks adalah?',a:['Judul heboh, sumber tidak jelas, mengajak marah / takut','Ada tanggal dan sumber jelas','Bahasa baku dan santun','Ada foto dan nama penulis jelas'],k:0},
+{q:'Cara mengecek fakta berita yang benar?',a:['Cek di situs resmi / media terpercaya, cek tanggal, cek sumber','Langsung bagikan ke grup','Lihat jumlah like-nya','Tanya teman yang juga belum tahu'],k:0},
+{q:'Judul berita yang paling mungkin hoaks adalah?',a:['"HEBOH! Pemerintah akan tutup semua sekolah besok! Bagikan!"','"Juara Lomba Puisi Tingkat Kabupaten"','"Dinas Pendidikan Umumkan Jadwal SAS"','"Siswa Kelas VII Belajar Teks Berita di Kelas"'],k:0},
+{q:'Berita ini hoaks atau bukan? "Minum air rebusan ini bisa menyembuhkan semua penyakit, bagikan sebelum dihapus!"',a:['Hoaks - Klaim berlebihan, sumber tidak jelas','Asli - Karena banyak yang bagikan','Asli - Karena ada kata dokter','Bukan hoaks'],k:0},
+{q:'Kamu dapat pesan WA: "Bantuan Rp 500 ribu, klik link ini, masukkan password." Apa yang kamu lakukan?',a:['Jangan klik, jangan kasih password, laporkan ke guru / orang tua, ini penipuan.','Langsung klik dan isi password.','Bagikan ke semua grup.','Percaya karena ada logo pemerintah.'],k:0},
+{q:'Pelindung bumi bisa dilakukan dengan cara?',a:['Buang sampah pada tempatnya, hemat air, tanam pohon','Buang sampah sembarangan','Bakar sampah plastik','Tebang pohon sembarangan'],k:0},
+{q:'Struktur teks berita yang benar adalah?',a:['Judul - Teras berita - Isi berita','Tujuan - Langkah - Penutup','Identifikasi - Deskripsi','Pembuka - Isi - Penutup surat'],k:0},
+{q:'Teras berita biasanya berisi?',a:['Inti berita: apa, siapa, kapan, di mana','Kesimpulan saja','Daftar pustaka','Iklan'],k:0},
+{q:'Berita yang baik harus?',a:['Fakta, jelas sumbernya, bahasa baku, tidak memihak','Hoaks tapi viral','Judul heboh saja','Tidak ada tanggal'],k:0}
+]},
+{n:'Bab 5 - Membuka Gerbang Dunia',m:'Teks Tanggapan Buku',sem:2,soal:[
+{q:'Sinopsis adalah?',a:['Ringkasan isi buku','Daftar pustaka','Surat resmi','Berita'],k:0},
+{q:'Tanggapan buku yang baik harus?',a:['Jujur, sopan, disertai bukti dari buku','Menjelek-jelekkan penulisnya','Hanya bilang bagus tanpa alasan','Menyalin sinopsis orang lain'],k:0},
+{q:'Bagian yang dinilai dalam tanggapan buku adalah?',a:['Isi, bahasa, dan alasan yang jelas','Jumlah halaman buku','Harga buku','Warna sampul buku'],k:0},
+{q:'Buku ini bagus karena ceritanya seru. Tanggapan ini kurang karena?',a:['Tidak ada bukti / contoh dari buku','Terlalu panjang','Terlalu sopan','Ada nama penulis'],k:0},
+{q:'Unsur buku yang bisa ditanggapi adalah?',a:['Isi cerita, bahasa, tokoh, sampul, pesan moral','Hanya harga buku','Hanya warna sampul','Hanya jumlah halaman'],k:0},
+{q:'Kalimat tanggapan yang sopan adalah?',a:['"Menurut saya, buku ini menarik karena ceritanya mudah dipahami."','"Buku ini jelek banget, penulisnya tidak becus."','"Buku ini sampah."','"Penulisnya bodoh."'],k:0},
+{q:'Membaca buku bisa?',a:['Membuka wawasan, menambah kosakata, melatih berpikir','Membuat malas','Membuang waktu','Tidak ada manfaatnya'],k:0},
+{q:'Gerbang dunia dalam judul Bab 5 maksudnya?',a:['Buku membuka pengetahuan tentang dunia','Pintu rumah','Gerbang sekolah','Pintu gerbang kota'],k:0}
+]},
+{n:'Bab 6 - Sampaikan Melalui Surat',m:'Surat & Media Sosial',sem:2,soal:[
+{q:'Surat resmi biasanya ditujukan untuk?',a:['Instansi / Kepala Sekolah / Dinas','Sahabat pena','Pacar','Teman main'],k:0},
+{q:'Etika bermedia sosial yang benar?',a:['Sopan, cek fakta sebelum bagikan, tidak menyebar hoaks','Bagikan semua yang viral','Komentar kasar kalau tidak setuju','Pakai akun palsu untuk mengejek'],k:0},
+{q:'Perbedaan surat pribadi dan surat resmi adalah?',a:['Pribadi untuk teman / keluarga, bahasa santai. Resmi untuk instansi, bahasa baku.','Tidak ada bedanya','Pribadi lebih panjang','Resmi tidak perlu tanggal'],k:0},
+{q:'Kamu mau posting di media sosial tentang temanmu. Mana yang benar?',a:['Minta izin dulu, jangan posting yang memalukan, pakai bahasa sopan.','Posting saja tanpa izin, biar viral.','Posting foto teman yang sedang tidur, lucu.','Posting rahasia teman.'],k:0},
+{q:'Bagian surat yang berisi tanggal surat disebut?',a:['Kepala surat / tanggal surat','Salam penutup','Tanda tangan','Lampiran'],k:0},
+{q:'Salam pembuka surat resmi yang sopan adalah?',a:['"Dengan hormat,"','"Hai bro,"','"Hei,"','"Woy,"'],k:0},
+{q:'Surat pribadi biasanya memakai bahasa?',a:['Santai, akrab, sopan','Kaku dan formal','Bahasa asing semua','Bahasa kasar'],k:0},
+{q:'Sebelum membagikan berita di media sosial, kita harus?',a:['Cek kebenarannya dulu, jangan asal bagikan','Langsung bagikan biar pertama','Tambahi bumbu biar heboh','Bagikan ke semua grup'],k:0}
+]}
+];
+var mode='kelompok';
+var semester=1;var babIdx=0;
+var teams=[
+{nama:'Kelompok A',poin:0,pos:0,warna:'#e53935',sudahJawab:[]},
+{nama:'Kelompok B',poin:0,pos:0,warna:'#1565c0',sudahJawab:[]},
+{nama:'Kelompok C',poin:0,pos:0,warna:'#2e7d32',sudahJawab:[]},
+{nama:'Kelompok D',poin:0,pos:0,warna:'#ef6c00',sudahJawab:[]}
+];
+var siswaList=[];
+var giliran=0;var timerInterval=null;var detik=30;var soalAktif=null;var soalBabAktif=0;var TOTAL_KOTAK=20;
+function pemainAktif(){return mode=='kelompok'?teams:siswaList;}
+function pilihMode(m){mode=m;document.getElementById('btnModeKelompok').className=m=='kelompok'?'on':'';document.getElementById('btnModePerorangan').className=m=='perorangan'?'on':'';document.getElementById('peroranganBox').style.display=m=='perorangan'?'block':'none';giliran=0;var list=daftarBabSemester(semester);var arr=pemainAktif();if(arr.length>0&&arr[0].sudahJawab.indexOf(babIdx)!=-1){for(var k=0;k<list.length;k++){if(arr[0].sudahJawab.indexOf(list[k])==-1){babIdx=list[k];break;}}}renderPilihBab();renderPapan();renderSkor();tutupSoal();if(m=='perorangan'&&siswaList.length==0){alert('Mode Perorangan: Tambah nama siswa dulu ya Bu, maksimal 50 siswa.');}}
+function tambahSiswa(){var inp=document.getElementById('inNamaSiswa');var nama=inp.value.trim();if(!nama){alert('Isi dulu nama siswanya.');return;}if(siswaList.length>=50){alert('Sudah 50 siswa, maksimal 50 ya Bu.');return;}var warnaList=['#e53935','#1565c0','#2e7d32','#ef6c00','#7b1fa2','#00838f','#6d4c41','#546e7a'];siswaList.push({nama:nama,poin:0,pos:0,warna:warnaList[siswaList.length%warnaList.length],sudahJawab:[]});inp.value='';inp.focus();renderDaftarSiswa();renderPapan();renderSkor();renderPilihBab();}
+function tambahContohSiswa(){var contoh=['Andi','Budi','Siti','Dewi','Rani','Rizki','Putri','Fajar','Nadia','Kevin'];for(var i=0;i<contoh.length;i++){if(siswaList.length>=50)break;var ada=false;for(var j=0;j<siswaList.length;j++){if(siswaList[j].nama==contoh[i]){ada=true;break;}}if(!ada){var warnaList=['#e53935','#1565c0','#2e7d32','#ef6c00','#7b1fa2','#00838f','#6d4c41','#546e7a'];siswaList.push({nama:contoh[i],poin:0,pos:0,warna:warnaList[siswaList.length%warnaList.length],sudahJawab:[]});}}renderDaftarSiswa();renderPapan();renderSkor();renderPilihBab();alert('Contoh 10 siswa sudah ditambahkan. Total: '+siswaList.length+' siswa.');}
+function hapusSemuaSiswa(){if(!confirm('Hapus semua siswa perorangan?')){return;}siswaList=[];giliran=0;renderDaftarSiswa();renderPapan();renderSkor();renderPilihBab();}
+function renderDaftarSiswa(){var html='Total: '+siswaList.length+' / 50 siswa. ';if(siswaList.length>=50){html+='🔒 Sudah penuh 50.';}for(var i=0;i<siswaList.length;i++){html+=(i+1)+'. '+siswaList[i].nama+' ('+siswaList[i].poin+' poin, Pos '+siswaList[i].pos+') • ';}document.getElementById('daftarSiswa').textContent=html;}
+function daftarBabSemester(s){var list=[];for(var i=0;i<BAB.length;i++){if(BAB[i].sem==s){list.push(i);}}return list;}
+function pilihSemester(s){semester=s;document.getElementById('btnSem1').className=s==1?'on':'';document.getElementById('btnSem2').className=s==2?'on':'';var list=daftarBabSemester(s);var arr=pemainAktif();var t=arr.length?arr[giliran%arr.length]:null;var belum=null;if(t){for(var i=0;i<list.length;i++){if(t.sudahJawab.indexOf(list[i])==-1){belum=list[i];break;}}}babIdx=(belum==null?list[0]:belum);renderPilihBab();tutupSoal();renderPapan();}
+function renderPilihBab(){var list=daftarBabSemester(semester);var arr=pemainAktif();var t=arr.length?arr[giliran%arr.length]:{nama:'-',sudahJawab:[]};var html='';for(var i=0;i<list.length;i++){var idx=list[i];var sudah=t.sudahJawab.indexOf(idx)!=-1;var cls='';if(idx==babIdx){cls+='on ';}if(sudah){cls+='locked';}html+='<button class="'+cls+'" onclick="pilihBab('+idx+')">'+BAB[idx].n+(sudah?' 🔒':'')+'</button>';}document.getElementById('pilihBab').innerHTML=html;document.getElementById('infoBab').textContent=BAB[babIdx].n+' - '+BAB[babIdx].m+' • '+BAB[babIdx].soal.length+' soal';var sudahTxt='Belum ada';if(t.sudahJawab.length>0){var a=[];for(var j=0;j<t.sudahJawab.length;j++){a.push(BAB[t.sudahJawab[j]].n);}sudahTxt=a.join(', ');}document.getElementById('infoSudahJawab').textContent=(t.nama||'-')+' sudah: '+sudahTxt;}
+function pilihBab(i){var arr=pemainAktif();if(arr.length==0){alert('Mode Perorangan: tambah siswa dulu ya Bu, minimal 1 siswa.');return;}var t=arr[giliran%arr.length];if(t.sudahJawab.indexOf(i)!=-1){bunyiKunci();alert('🔒 Maaf '+t.nama+', Bab ini sudah kalian jawab tadi, tidak bisa diulang lagi.');return;}babIdx=i;renderPilihBab();tutupSoal();}
+function tandaiSudahJawab(bab){var arr=pemainAktif();if(arr.length==0)return;var t=arr[giliran%arr.length];if(t.sudahJawab.indexOf(bab)==-1){t.sudahJawab.push(bab);}renderPilihBab();renderSkor();if(mode=='perorangan'){renderDaftarSiswa();}}
+function renderPapan(){var html='';for(var i=0;i<=TOTAL_KOTAK;i++){var label='';var cls='soal';var sub='Soal';if(i==0){label='🏁 START';cls='start';sub='Mulai';}else if(i==TOTAL_KOTAK){label='🏆 FINISH 20';cls='finish';sub='Menang!';}else if(i%5==0){label='🎁 BONUS';cls='bonus';sub='+100, pindah!';}else if(i%4==0){label='💣 ZONK';cls='zonk';sub='-50, pindah!';}else{label='❓ '+i;cls='soal';sub=BAB[babIdx].m;}var pion='';var arr=pemainAktif();for(var ti=0;ti<arr.length;ti++){if(arr[ti].pos==i){var emoji='🔴';if(mode=='perorangan'){emoji='🧍';}else{emoji=['🔴','🔵','🟢','🟠'][ti%4];}pion+='<span class="pion">'+emoji+' '+arr[ti].nama.replace('Kelompok ','')+'</span>';}}html+='<div class="kotak '+cls+'" onclick="bukaKotak('+i+')"><div>'+label+'</div><small>'+sub+'</small>'+pion+'</div>';}document.getElementById('papan').innerHTML=html;}
+function renderSkor(){var arr=pemainAktif();var html='';if(mode=='kelompok'){for(var i=0;i<arr.length;i++){var t=arr[i];var sudahTxt='Belum';if(t.sudahJawab.length>0){var a=[];for(var j=0;j<t.sudahJawab.length;j++){a.push(BAB[t.sudahJawab[j]].n.replace('Bab ','B'));}sudahTxt=a.join(', ');}html+='<div class="team '+(i==giliran?'on':'')+'"><b style="color:'+t.warna+'">● '+t.nama+'</b><div class="poin">'+t.poin+'</div><div class="kecil">Posisi: '+t.pos+' / '+TOTAL_KOTAK+' • Sudah: '+sudahTxt+'</div><input value="'+t.nama+'" onchange="gantiNamaKelompok('+i+',this.value)"></div>';}}else{if(arr.length==0){html='<div class="team">Belum ada siswa. Tambah siswa dulu di atas, maks 50 siswa.</div>';}else{var urut=arr.slice().sort(function(a,b){return b.poin-a.poin;});var tampil=urut.slice(0,8);for(var i2=0;i2<tampil.length;i2++){var tt=tampil[i2];var idxAsli=arr.indexOf(tt);html+='<div class="team '+(idxAsli==giliran?'on':'')+'"><b style="color:'+tt.warna+'">● '+(i2+1)+'. '+tt.nama+'</b><div class="poin">'+tt.poin+'</div><div class="kecil">Posisi: '+tt.pos+' / '+TOTAL_KOTAK+' • Total: '+arr.length+'/50</div></div>';}if(arr.length>8){html+='<div class="team"><b>... + '+(arr.length-8)+' siswa lagi</b><div class="kecil">Klik LIHAT JUARA untuk juara 1-50.</div></div>';}}}document.getElementById('skorBox').innerHTML=html;var cur=arr.length?arr[giliran%arr.length]:{nama:'-',pos:0};document.getElementById('giliran').textContent=cur.nama;var posTxt='START';if(cur.pos==TOTAL_KOTAK){posTxt='FINISH 🏆';}else if(cur.pos!=0){posTxt='Kotak '+cur.pos;}document.getElementById('posisiTxt').textContent='Posisi: '+posTxt;}
+function gantiNamaKelompok(i,nama){if(nama.trim()!=''){teams[i].nama=nama.trim();}renderSkor();renderPapan();renderPilihBab();}
+function acakKelompok(){var arr=pemainAktif();if(arr.length==0){alert('Tambah siswa dulu ya Bu.');return;}giliran=Math.floor(Math.random()*arr.length);var list=daftarBabSemester(semester);var t=arr[giliran];if(t.sudahJawab.indexOf(babIdx)!=-1){for(var k=0;k<list.length;k++){if(t.sudahJawab.indexOf(list[k])==-1){babIdx=list[k];break;}}}renderSkor();renderPilihBab();alert('Giliran pertama: '+arr[giliran].nama+'! Silakan lempar dadu.');}
+function lemparDadu(){var arr=pemainAktif();if(arr.length==0){alert('Tambah siswa dulu ya Bu, minimal 1 siswa / kelompok.');return;}bunyiDadu();var d=Math.floor(Math.random()*6)+1;var emojis=['','⚀','⚁','⚂','⚃','⚄','⚅'];document.getElementById('dadu').textContent=emojis[d];var t=arr[giliran%arr.length];t.pos=Math.min(TOTAL_KOTAK,t.pos+d);renderPapan();renderSkor();setTimeout(function(){if(t.pos==TOTAL_KOTAK){bunyiFinish();alert('🏆 '+t.nama+' SAMPAI FINISH 20! +200 bonus!');t.poin+=200;renderSkor();renderPapan();tampilJuara();pindahGiliran();}else if(t.pos%5==0&&t.pos!=0){bunyiBonus();alert('🎁 BONUS! '+t.nama+' dapat +100! Giliran langsung pindah, tidak bisa lempar 2x.');t.poin+=100;renderSkor();pindahGiliran();}else if(t.pos%4==0&&t.pos!=0){bunyiZonk();alert('💣 ZONK! '+t.nama+' kena -50! Giliran langsung pindah.');t.poin=Math.max(0,t.poin-50);renderSkor();pindahGiliran();}else{bukaSoalAcak();}},600);}
+function bukaKotak(i){if(i==0||i==TOTAL_KOTAK){return;}var arr=pemainAktif();if(arr.length==0){return;}var t=arr[giliran%arr.length];t.pos=i;renderPapan();renderSkor();bukaSoalAcak();}
+function bukaSoalAcak(){var list=BAB[babIdx].soal;var soalAsli=list[Math.floor(Math.random()*list.length)];var urutan=acakArray([0,1,2,3]);var jawabanAcak=[];for(var i=0;i<4;i++){jawabanAcak.push(soalAsli.a[urutan[i]]);}var kunciBaru=-1;for(var j=0;j<4;j++){if(urutan[j]==soalAsli.k){kunciBaru=j;break;}}soalAktif={q:soalAsli.q,a:jawabanAcak,k:kunciBaru};soalBabAktif=babIdx;var arr=pemainAktif();var cur=arr.length?arr[giliran%arr.length]:{nama:'-'};document.getElementById('soalBox').style.display='block';document.getElementById('soalJudul').textContent='SOAL UNTUK '+cur.nama+' - '+BAB[babIdx].n;document.getElementById('soalTeks').textContent=soalAktif.q;var html='';for(var ii=0;ii<4;ii++){html+='<button onclick="cekJawaban('+ii+')">'+['A','B','C','D'][ii]+'. '+soalAktif.a[ii]+'</button>';}document.getElementById('jawabanBox').innerHTML=html;mulaiTimer();}
+function cekJawaban(ii){var babYangDijawab=soalBabAktif;var arr=pemainAktif();var cur=arr[giliran%arr.length];if(ii==soalAktif.k){bunyiBenar();alert('✅ BENAR! +100 untuk '+cur.nama);cur.poin+=100;tandaiSudahJawab(babYangDijawab);tutupSoal();pindahGiliran();}else{bunyiSalah();alert('❌ SALAH! Jawaban benar: '+['A','B','C','D'][soalAktif.k]+'. Pion '+cur.nama+' BALIK KE START!');cur.pos=0;tandaiSudahJawab(babYangDijawab);renderPapan();renderSkor();tutupSoal();pindahGiliran();}}
+function tutupSoal(){document.getElementById('soalBox').style.display='none';clearInterval(timerInterval);}
+function pindahGiliran(){var arr=pemainAktif();if(arr.length==0)return;giliran=(giliran+1)%arr.length;var list=daftarBabSemester(semester);var t=arr[giliran];if(t.sudahJawab.indexOf(babIdx)!=-1){for(var k=0;k<list.length;k++){if(t.sudahJawab.indexOf(list[k])==-1){babIdx=list[k];break;}}}renderSkor();renderPilihBab();}
+function tampilJuara(){var arr=pemainAktif();if(arr.length==0){alert('Belum ada pemain.');return;}var urut=arr.slice().sort(function(a,b){return b.poin-a.poin;});var txt='🏆 JUARA '+(mode=='kelompok'?'KELOMPOK':'PERORANGAN - '+arr.length+' SISWA')+' - ';for(var i=0;i<urut.length;i++){txt+=(i==0?'🥇 ':i==1?'🥈 ':i==2?'🥉 ':(i+1)+'. ')+urut[i].nama+' - '+urut[i].poin+' poin (Posisi '+urut[i].pos+'/'+TOTAL_KOTAK+') • ';}document.getElementById('juaraBox').style.display='block';document.getElementById('juaraBox').textContent=txt;}
+function mulaiTimer(){clearInterval(timerInterval);detik=30;document.getElementById('timer').textContent=detik;timerInterval=setInterval(function(){detik--;document.getElementById('timer').textContent=detik;if(detik<=0){clearInterval(timerInterval);var arr=pemainAktif();var cur=arr.length?arr[giliran%arr.length]:{nama:'-'};alert('⏰ WAKTU HABIS! Pion '+cur.nama+' BALIK KE START!');if(arr.length){cur.pos=0;}tandaiSudahJawab(soalBabAktif);renderPapan();renderSkor();tutupSoal();pindahGiliran();}},1000);}
+function resetGame(){if(!confirm('Ulang dari awal? Skor 0 lagi, kunci Bab dibuka lagi, pion balik ke START. Nama siswa tidak dihapus.')){return;}var arr=pemainAktif();for(var i=0;i<arr.length;i++){arr[i].poin=0;arr[i].pos=0;arr[i].sudahJawab=[];}giliran=0;document.getElementById('juaraBox').style.display='none';renderPapan();renderSkor();renderPilihBab();tutupSoal();}
+renderPilihBab();renderPapan();renderSkor();renderDaftarSiswa();
+</script></body></html>
